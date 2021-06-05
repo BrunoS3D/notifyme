@@ -1,4 +1,4 @@
-import { Client, Intents } from 'discord.js';
+import { Client, Intents, MessageEmbed, TextChannel } from 'discord.js';
 
 import config from './config.json';
 
@@ -11,8 +11,21 @@ DISCORD_CLIENT.on('ready', async () => {
 DISCORD_CLIENT.on('message', async (message) => {
     if (message.author.bot) return;
 
-    if (message.content.toLowerCase() === 'ping') {
-        await message.reply('pong!');
+    if (config.watchlist.some((word) => message.content.toLowerCase().includes(word.toLowerCase()))) {
+        const logChannel = (await DISCORD_CLIENT.channels.fetch(config.logChannelId)) as TextChannel; // canal bot-testing do mib
+
+        const embed = new MessageEmbed();
+
+        const refMsgUrl = `https://discord.com/channels/${message.guild?.id}/${message.channel.id}/${message.id}`;
+
+        embed.setAuthor(message.author.username, message.author.avatarURL() || '', refMsgUrl);
+        embed.setDescription(`[ir para mensagem](${refMsgUrl})\n\n${message.content}`);
+        embed.setURL(refMsgUrl);
+        embed.setFooter(message.author.username);
+        embed.setTimestamp(message.createdAt);
+        embed.setColor(0x008fff);
+
+        await logChannel.send(embed);
     }
 });
 

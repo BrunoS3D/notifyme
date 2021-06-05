@@ -1,5 +1,7 @@
 {
     "bot": {
-        "token": "YOUR DISCORD BOT TOKEN HERE"
-    }
+        "token": "your token"
+    },
+    "logChannelId": "614494637251624981",
+    "watchlist": ["fullscreen", "enhanced hierarchy", "samuel schultze"]
 }
